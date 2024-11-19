@@ -8,14 +8,18 @@
         <div>
             <!-- <img class="poster" :src="store.movieId ? require('@/assets/selectimg.jpeg') : require('@/assets/defaultimg.jpeg')" alt=""><br> -->
             <img class="poster" src='@/assets/selectimg.jpeg'><br>
-            <button class="select-movie">영화 선택</button>
+            <button class="select-movie" @click="gogoSelect">영화 선택</button>
         </div>
         
         <div>
             <div class="description">
-                <p style="font-size: medium;">영화 줄거리가 들어갈 공간입니다.</p>
+                <p style="font-size: medium; padding: 5px;" v-if="moviestore.movieId">{{moviestore.description}}</p>
+                <p style="font-size: medium;" v-else>영화 줄거리가 들어갈 공간입니다.</p>
             </div>
-            <button class="start-game" @click="startGame">게임 시작</button>
+            <button class="start-game" @click="startGame"
+                    :class="{ 'red-background': moviestore.movieId }">
+        게임 시작
+    </button>
 
         </div>
         <div>
@@ -34,9 +38,15 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/counter';
-
+import { useMovieStore, useUserStore } from '@/stores/counter';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const store = useUserStore()
+const moviestore = useMovieStore()
+
+const gogoSelect = function(){
+    router.push({name:'SelectMovie'})
+}
 
 const startGame = function () {
 
@@ -84,8 +94,15 @@ const startGame = function () {
     background-color: black;
     height: 85%;
 }
-.start-game{
-    height: fit-content;
-    font-size: larger;
+.red-background {
+    background-color: red;
+    color: white; /* 버튼 글씨 색을 흰색으로 변경 */
+}
+.start-game {
+    padding: 10px 20px;
+    font-size: large;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 </style>

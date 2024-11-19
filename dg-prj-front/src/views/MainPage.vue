@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/counter';
+import { useMovieStore, useUserStore } from '@/stores/counter';
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
@@ -44,6 +44,8 @@ import {v4 as uuidv4} from 'uuid'
 const email = ref(null)
 const password = ref(null)
 const store = useUserStore()
+const moviestore = useMovieStore()
+
 
 const router = useRouter()
 
@@ -66,6 +68,8 @@ const CreateRoom = function () {
     // 방 번호가 랜덤으로 들어가야함. 이지만 나중에 해보자잇.
 
     const roomId = uuidv4()
+    moviestore.roomId = roomId
+    console.log(moviestore.roomId)
     router.push({name:'LoungeView', params: {roomId}})
     
     
