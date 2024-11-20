@@ -71,7 +71,8 @@
           "__hmrId": "e13a7004",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/components/recordtest.vue"
         }
-      }, {
+      },
+      {
         "path": "/",
         "name": "main",
         "component": {
@@ -80,7 +81,8 @@
           "__scopeId": "data-v-7fc90d69",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/views/MainPage.vue"
         }
-      }, {
+      },
+      {
         "path": "/signup",
         "name": "SignUpView",
         "component": {
@@ -88,7 +90,8 @@
           "__hmrId": "33d48dbc",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/views/SignUpView.vue"
         }
-      }, {
+      },
+      {
         "path": "/profile=:userId",
         "name": "ProfilePageView",
         "component": {
@@ -96,7 +99,8 @@
           "__hmrId": "bcdc7105",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/views/ProfilePageView.vue"
         }
-      }, {
+      },
+      {
         "path": "/lounge/:roomId",
         "name": "LoungeView",
         "component": {
@@ -106,7 +110,8 @@
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/views/LoungeView.vue"
         },
         "props": true
-      }, {
+      },
+      {
         "path": "/movieselect",
         "name": "SelectMovie",
         "component": {
@@ -115,7 +120,8 @@
           "__scopeId": "data-v-3d9909b0",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/views/SelectMovie.vue"
         }
-      }, {
+      },
+      {
         "path": "/loading",
         "name": "loading",
         "component": {
@@ -123,7 +129,8 @@
           "__hmrId": "a7e8eccd",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/components/ComeScenario.vue"
         }
-      }, {
+      },
+      {
         "path": "/typetoend/:roomId",
         "name": "GamePlayView",
         "component": {
@@ -132,7 +139,8 @@
           "__scopeId": "data-v-f7d75dc5",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/views/GamePlayView.vue"
         }
-      }, {
+      },
+      {
         "path": "/evaluation",
         "name": "evaluation",
         "component": {
@@ -140,7 +148,8 @@
           "__hmrId": "87be3491",
           "__file": "C:/Users/SSAFY/Desktop/DG_prj/dg-prj-front/src/components/EvaluationView.vue"
         }
-      }, {
+      },
+      {
         "path": "/roundresult",
         "name": "roundresult",
         "component": {

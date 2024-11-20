@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from django.utils import timezone
 from .models import GameRecord, Movie
 import json
+from rest_framework.response import Response
 
 # .env 파일 로드
 load_dotenv()
@@ -17,59 +18,17 @@ def get_movie_context(movie_id):
     movie = Movie.objects.get(id=movie_id) # 일단 1로..
     return movie.context
 
-## 해리포터 세계관. 정보
-harry_potter_context = """
-해리포터는 마법 세계를 배경으로 한 이야기로, 마법사, 마녀, 마법 생물, 어둠의 마법사들 간의 갈등과 모험을 그립니다. 주요 내용과 설정은 다음과 같습니다.
-
-1. 주요 등장인물:
-- 해리 포터 (Harry Potter): 마법 세계의 영웅으로 여겨지며, '선택된 아이'로 불립니다. 볼드모트의 가장 큰 적으로, 그의 이마에는 번개 모양의 흉터가 있습니다.
-- 헤르미온느 그레인저 (Hermione Granger): 해리의 가장 똑똑한 친구로, 마법 이론과 실전에 모두 능합니다. 항상 냉철한 판단을 내립니다.
-- 론 위즐리 (Ron Weasley): 해리의 충실한 친구로, 용기 있고 의리를 중시합니다. 가끔 실수를 하지만 중요한 순간에 큰 역할을 합니다.
-- 알버스 덤블도어 (Albus Dumbledore): 호그와트의 교장으로, 현명하고 강력한 마법사입니다. 해리에게 중요한 조언과 도움을 줍니다.
-- 볼드모트 (Lord Voldemort): 어둠의 군주로 불리며, 순수 혈통을 중시하는 사악한 마법사입니다. 호크룩스라는 어둠의 마법으로 자신의 영혼을 나누어 불사신이 되려 합니다.
-- 세베루스 스네이프 (Severus Snape): 포션 교수이자 이중 스파이로, 그의 진정한 충성심은 마지막까지 미스터리로 남습니다.
-- 드레이코 말포이 (Draco Malfoy): 순수혈통을 자랑하는 말포이 가문의 아들로, 해리와 항상 대립합니다.
-- 루나 러브굿 (Luna Lovegood): 독특하고 창의적인 성격을 가진 해리의 친구로, 마법 세계의 다양한 생물에 대해 깊은 지식을 가지고 있습니다.
-
-2. 주요 장소:
-- 호그와트 마법학교 (Hogwarts): 마법사와 마녀들이 교육을 받는 학교로, 네 개의 기숙사(그리핀도르, 슬리데린, 후플푸프, 래번클로)가 있습니다. 성은 여러 가지 마법으로 보호되고 있으며, 비밀 통로와 숨겨진 방이 많습니다.
-- 어둠의 숲 (Forbidden Forest): 위험한 마법 생물들이 살고 있는 숲으로, 학내 규칙상 접근이 금지된 장소입니다.
-- 다이애건 앨리 (Diagon Alley): 마법사들이 쇼핑을 하는 거리로, 마법 지팡이, 빗자루, 마법책 등을 구매할 수 있습니다.
-- 그린고트 은행 (Gringotts): 마법 세계의 유일한 은행으로, 고블린들이 운영하며 매우 강력한 보안을 자랑합니다.
-- 아즈카반 (Azkaban): 마법사들이 수감되는 감옥으로, 디멘터라는 어둠의 생물이 경비를 서고 있습니다.
-
-3. 마법과 마법 아이템:
-- 마법 지팡이 (Wand): 마법을 사용할 때 필요한 도구로, 각각의 지팡이는 사용자와 독특한 연결을 형성합니다.
-- 호크룩스 (Horcrux): 영혼을 나눠 물건에 저장하여 죽음을 피할 수 있는 어둠의 마법입니다.
-- 투명 망토 (Invisibility Cloak): 사용자를 투명하게 만들어 숨거나 도망칠 때 유용합니다.
-- 죽음의 성물 (Deathly Hallows): 세 가지 강력한 마법 아이템으로, elder wand, resurrection stone, invisibility cloak가 포함됩니다.
-- 퀴디치 빗자루 (Quidditch Broomstick): 마법 세계에서 비행할 때 사용하는 도구입니다.
-
-4. 주요 갈등:
-- 볼드모트와의 전쟁: 마법 세계를 지배하려는 볼드모트와 그를 막으려는 저항 세력(덤블도어의 군대, 피닉스 기사단) 간의 대립.
-- 혈통 문제: 순수 혈통 마법사와 머글 태생 마법사(머글 부모에게서 태어난 마법사) 간의 차별과 갈등.
-- 호그와트의 비밀: 비밀의 방, 죽음의 성물, 호그와트 내 숨겨진 통로 등 학교 자체가 다양한 미스터리를 품고 있음.
-
-5. 마법 생물:
-- 히포그리프 (Hippogriff): 말과 독수리의 혼합 생물로, 매우 예의를 중시합니다.
-- 디멘터 (Dementor): 영혼을 흡수하며, 아즈카반을 경비하는 어둠의 생물.
-- 드래곤 (Dragon): 강력하고 위험한 생물로, 불을 뿜으며 금고를 지키는 데 사용되기도 합니다.
-- 도비 (Dobby): 집요정으로, 해리에게 중요한 도움을 준 충직한 존재입니다.
-- 페닉스 (Phoenix): 불사조로, 재에서 다시 태어나며 치유의 능력을 가지고 있습니다.
-
-이 모든 설정은 해리포터 세계관을 구성하며, 당신은 이 설정에 기반하여 게임 시나리오를 진행하고, 문제를 해결해야 합니다.
-"""
 
 # OpenAI 모델 초기화
 chat = ChatOpenAI(temperature=0.5, openai_api_key=OPENAI_API_KEY)
 
 
 game_record = [  # 각 라운드의 기록
+    
 ]
 
-########################################################################
-############################ 템플릿 모음 ################################
-# 프롬프트 템플릿
+# 프롬프트 템플릿 정의
+# 프롬프트를 잘 만지자. 답변 형식도 지정해줘야 할 듯.
 evaluation_prompt = PromptTemplate(
     input_variables=["situation", "user_action", "context"],
     template=(
@@ -84,6 +43,7 @@ evaluation_prompt = PromptTemplate(
     )
 )
 
+# 게임 진행 요약을 위한 프롬프트
 summary_prompt = PromptTemplate(
     input_variables = ["history"],
     template = (
@@ -93,12 +53,13 @@ summary_prompt = PromptTemplate(
         "유저가 해결한 문제와 그 행동, 그리고 상황의 흐름을 포함해야 합니다. "
     )
 )
-################################################################
-################################################################
 
 
 # 행동 평가 및 다음 상황 생성 함수
 def evaluate_and_generate_next(situation, user_action,context):
+    """
+    사용자 행동을 평가하고 다음 상황을 생성하는 함수
+    """
     llm_chain = LLMChain(llm=chat, prompt=evaluation_prompt)
     result = llm_chain.run({
         "situation": situation,
@@ -107,13 +68,17 @@ def evaluate_and_generate_next(situation, user_action,context):
     })
     return result
 
+# 평가 결과 처리
 def process_evaluation_and_next(result):
-    # 응답 분석
+    """
+    AI의 응답을 분석하여 점수, 유효성, 이유, 다음 문제를 추출하는 함수
+    """
     lines = result.split("\n")
     try:
         # 점수를 포함한 텍스트에서 숫자만 추출
         score_text = lines[0].split("점")[0].split()[-1].strip()
         score = int(score_text)  # 정수로 변환
+        is_valid = score >=50
     except (ValueError, IndexError):
         score = 0  # 오류 발생 시 기본값 설정
     
@@ -124,8 +89,11 @@ def process_evaluation_and_next(result):
     return score, is_valid, reason, next_problem
 
 
-
+# 게임 요약 생성
 def generate_summary(history):
+    """
+    게임 진행 기록을 바탕으로 전체 스토리 요약을 생성하는 함수
+    """
     llm_chain = LLMChain(llm=chat, prompt=summary_prompt)
     result = llm_chain.run({
         "history":history
@@ -133,149 +101,29 @@ def generate_summary(history):
     return result
 
 
-#####################################################################
-############################## 메인 루프 #############################
-def game_loop():
-    # 첫 시나리오 설정
-    current_situation = {
-        "id": 1,
-        "movie": "Harry Potter",
-        "situation": "당신은 호그와트 도서관에 있습니다. 볼드모트의 추종자들이 당신을 찾고 있습니다. 도망칠 방법을 찾아야 합니다."
-    }
-    context = harry_potter_context  # 영화 세계관 정보
-    game_round = 0  # 게임 회차
-    
-    history = []  # 게임 진행 기록 저장
-
-    while True:
-        print(f"\n🧩 [현재 상황]: {current_situation['situation']}")
-        
-        # 유저 행동 입력
-        user_action = input("🔍 [당신의 대처는?]: ")
-
-        # 행동 평가 및 새로운 문제 상황 생성
-        print("\n📝 [결과 평가 중...]\n")
-        evaluation_result = evaluate_and_generate_next(
-            situation=current_situation["situation"],
-            user_action=user_action,
-            context=context
-        )
-
-        # 응답 처리
-        score, is_valid, reason, next_problem = process_evaluation_and_next(evaluation_result)
-
-        # 상세 결과 출력
-        print("✅ [평가 결과]")
-        print(f"   행동 점수: {score}")
-        print(f"   적절성 여부: {'Yes' if is_valid else 'No'}")
-        print(f"   이유: {reason}")
-        print(f"\n📖 [새로운 문제 상황]: {next_problem}")
-
-        # 히스토리 저장
-        history.append({
-            'round': game_round + 1,
-            'situation': current_situation['situation'],
-            'user_action': user_action,
-            'eval': "적절함" if is_valid else "부적절함",
-            'score': score
-        })
-
-        # 종료 조건 확인
-        if "게임 종료" in next_problem:
-            print("\n💀 [게임 종료!]: 새로운 문제 상황에 '게임 종료' 조건이 포함되었습니다.")
-            break
-        elif game_round >= 4:  # 최대 5회로 제한
-            print("\n🕒 [게임 종료!]: 최대 라운드(5회)를 초과했습니다.")
-            break
-
-        # 다음 상황 설정
-        game_record.append(
-            {
-                "round": game_round,
-                "situation": current_situation['situation'],
-                "user_action": user_action,
-                "score": score,
-                "evaluation": True if score > 50 else False,
-                "reason": reason,
-                "next_situation": next_problem
-            }
-        )
-
-
-        current_situation = {"situation": next_problem}
-        game_round += 1
-
-
-    ############################################################################
-    # 요약 생성 및 출력
-    print("\n🎞 [전체 시나리오 요약]")
-    formatted_history = "\n".join(
-        f"라운드 {entry['round']}: [상황]: {entry['situation']}\n"
-        f"   [행동]: {entry['user_action']}\n"
-        f"   [평가]: {entry['eval']}, 점수: {entry['score']}"
-        for entry in history
-    )
-    summary = generate_summary(formatted_history)
-    print(summary)
-
-    game_record.append({"summary":summary})
-
-def play_game_round1(game_record, user_action):
-    context = get_movie_context(game_record.movie.id)
-
-    # 이전 라운드 데이터 or 첫 질문 가져오기
-    if game_record.history:
-        history = json.loads(game_record.history)
-        current_situation = history[-1]['next_situation']
-    else :
-        history = []
-        current_situation = game_record.movie.initial_questions.order_by('?').first().question
-    
-    evaluation_result = evaluate_and_generate_next(
-        situation = current_situation,
-        user_action=user_action,
-        context = context,
-    )
-    
-    score, is_valid, reason, next_problem = process_evaluation_and_next(evaluation_result)
-
-    round_data = {
-        "round": len(history) + 1 if game_record.history else 1,
-        "situation": current_situation,
-        "user_action": user_action,
-        "score": score,
-        "evaluation": "채택" if is_valid else "폐기",
-        "reason": reason,
-        "next_situation": next_problem
-    }
-
-    if game_record.history:
-        history.append(round_data)
-    else:
-        history = [round_data]
-
-    game_record.history = json.dumps(history)
-    game_record.total_score += score
-
-    is_game_over = len(history) >= 5
-
-    if is_game_over:
-        game_record.end_time = timezone.now()
-        game_record.end_status = 'COMPLETED'
-    
-    game_record.save()
-
-    return next_problem, is_game_over
 
 def play_game_round(game_record, user_action):
-    # history가 이미 Python 객체로 변환되어 있으므로 그대로 사용
-    history = game_record.history
+    # history가 문자열일 경우 JSON으로 변환
+    if isinstance(game_record.history, str):
+        try:
+            history = json.loads(game_record.history) or []
+        except json.JSONDecodeError:
+            history = []
+    else:
+        history = game_record.history or []
+
+    # 현재 라운드 확인
+    current_round = len(history) + 1
 
     # 현재 상황 가져오기
     if history:
         current_situation = history[-1]['next_situation']
     else:
-        current_situation = game_record.movie.initial_questions.order_by('?').first().question
+        # 초기 질문 설정
+        initial_question = game_record.movie.initial_questions.order_by('?').first()
+        if not initial_question:
+            return Response({"error": "No initial questions available for this movie."}, status=400)
+        current_situation = initial_question.question
 
     # 행동 평가 및 다음 상황 생성
     evaluation_result = evaluate_and_generate_next(
@@ -284,11 +132,218 @@ def play_game_round(game_record, user_action):
         context=get_movie_context(game_record.movie.id),
     )
 
+    # 응답 처리
     score, is_valid, reason, next_problem = process_evaluation_and_next(evaluation_result)
 
     # 새로운 라운드 데이터 추가
     round_data = {
-        "round": len(history) + 1,
+        "round": current_round,
+        "situation": current_situation,
+        "user_action": user_action,
+        "score": score,
+        "evaluation": "적절함" if is_valid else "부적절함",
+        "reason": reason,
+        "next_situation": next_problem
+    }
+
+    # 중복 방지: 현재 라운드가 이미 존재하는지 확인
+    if not any(entry['round'] == current_round for entry in history):
+        history.append(round_data)
+
+    # 기록 업데이트
+    game_record.history = json.dumps(history, ensure_ascii=False)  # 직렬화하여 JSON으로 저장
+    game_record.total_score += score
+
+    # 게임 종료 조건 확인
+    is_game_over = len(history) >= 5
+    if is_game_over:
+        game_record.end_time = timezone.now()
+        game_record.end_status = 'COMPLETED'
+
+    game_record.save()
+    print('game_record 저장')
+
+    return next_problem, is_game_over, reason, is_valid
+
+def play_game_round2(game_record, user_action):
+    # history 초기화
+    if isinstance(game_record.history, str):
+        try:
+            history = json.loads(game_record.history) or []
+        except json.JSONDecodeError:
+            history = []
+    else:
+        history = game_record.history or []
+
+    # 현재 라운드 계산
+    # current_round = len(history) + 1
+    if not history:
+        current_round = 0  # 첫 라운드일 경우 0으로 설정
+    else :
+        current_round +=1
+
+    # 현재 상황 가져오기
+    if history:
+        current_situation = history[-1]['next_situation']
+    else:
+        # 초기 질문 설정
+        initial_question = game_record.movie.initial_questions.order_by('?').first()
+        if not initial_question:
+            return Response({"error": "No initial questions available for this movie."}, status=400)
+
+        # 첫 라운드 생성
+        current_situation = initial_question.question
+        round_data = {
+            "round": 1,
+            "situation": current_situation,
+            "user_action": None,
+            "score": 0,
+            "evaluation": None,
+            "reason": None,
+            "next_situation": None
+        }
+        history.append(round_data)
+
+    # 행동 평가 및 다음 상황 생성
+    evaluation_result = evaluate_and_generate_next(
+        situation=current_situation,
+        user_action=user_action,
+        context=get_movie_context(game_record.movie.id),
+    )
+
+    # 응답 처리
+    score, is_valid, reason, next_problem = process_evaluation_and_next(evaluation_result)
+
+    # 라운드 데이터 생성
+    round_data = {
+        "round": current_round,
+        "situation": current_situation,
+        "user_action": user_action,
+        "score": score,
+        "evaluation": "적절함" if is_valid else "부적절함",
+        "reason": reason,
+        "next_situation": next_problem
+    }
+
+    # 중복 방지 및 추가
+    if history and any(entry['round'] == current_round for entry in history):
+        print(f"Round {current_round} already exists in history.")
+    else:
+        history.append(round_data)
+
+    # 기록 업데이트
+    game_record.history = json.dumps(history, ensure_ascii=False)
+    game_record.total_score += score
+
+    # 게임 종료 조건 확인
+    is_game_over = len(history) >= 5
+    if is_game_over:
+        game_record.end_time = timezone.now()
+        game_record.end_status = 'COMPLETED'
+
+    game_record.save()
+
+    # 디버깅 로그 추가
+    print(f"Current Round: {current_round}")
+    print(f"History Length: {len(history)}")
+    print(f"History Data: {history}")
+    print(f"Next Problem: {next_problem}")
+    print(f"Is Game Over: {is_game_over}")
+
+    return next_problem, is_game_over, reason, is_valid
+
+    # history 초기화
+    if isinstance(game_record.history, str):
+        try:
+            history = json.loads(game_record.history) or []
+        except json.JSONDecodeError:
+            history = []
+    else:
+        history = game_record.history or []
+
+    # 현재 라운드 계산
+    current_round = len(history) + 1
+
+    # 현재 상황 가져오기
+    if history:
+        current_situation = history[-1]['next_situation']
+    else:
+        # 초기 질문 설정
+        initial_question = game_record.movie.initial_questions.order_by('?').first()
+        if not initial_question:
+            return Response({"error": "No initial questions available for this movie."}, status=400)
+
+        # 첫 라운드 생성
+        current_situation = initial_question.question
+        first_round_data = {
+            "round": current_round,
+            "situation": current_situation,
+            "user_action": None,
+            "score": 0,
+            "evaluation": None,
+            "reason": None,
+            "next_situation": None
+        }
+        history.append(first_round_data)
+
+    # 행동 평가 및 다음 상황 생성
+    evaluation_result = evaluate_and_generate_next(
+        situation=current_situation,
+        user_action=user_action,
+        context=get_movie_context(game_record.movie.id),
+    )
+
+    # 응답 처리
+
+def play_game_round4(game_record, user_action):
+    # history 초기화
+    if isinstance(game_record.history, str):
+        try:
+            history = json.loads(game_record.history) or []
+        except json.JSONDecodeError:
+            history = []
+    else:
+        history = game_record.history or []
+
+    # 현재 라운드 계산
+    current_round = len(history) + 1
+
+    # 현재 상황 가져오기
+    if history:
+        current_situation = history[-1]['next_situation']
+    else:
+        # 초기 질문 설정
+        initial_question = game_record.movie.initial_questions.order_by('?').first()
+        if not initial_question:
+            return None, None, "No initial questions available for this movie.", False  # 기본 반환값
+        # 첫 라운드 데이터 추가
+        current_situation = initial_question.question
+        first_round_data = {
+            "round": current_round,
+            "situation": current_situation,
+            "user_action": None,
+            "score": 0,
+            "evaluation": None,
+            "reason": None,
+            "next_situation": None
+        }
+        history.append(first_round_data)
+
+    # 행동 평가 및 다음 상황 생성
+    try:
+        evaluation_result = evaluate_and_generate_next(
+            situation=current_situation,
+            user_action=user_action,
+            context=get_movie_context(game_record.movie.id),
+        )
+        # 응답 처리
+        score, is_valid, reason, next_problem = process_evaluation_and_next(evaluation_result)
+    except Exception as e:
+        return None, None, str(e), False  # 예외 발생 시 기본 반환값
+
+    # 새로운 라운드 데이터 추가
+    round_data = {
+        "round": current_round,
         "situation": current_situation,
         "user_action": user_action,
         "score": score,
@@ -299,10 +354,10 @@ def play_game_round(game_record, user_action):
     history.append(round_data)
 
     # 기록 업데이트
-    game_record.history = history  # JSONField에 바로 저장
+    game_record.history = json.dumps(history, ensure_ascii=False)
     game_record.total_score += score
 
-    # 게임 종료 조건
+    # 게임 종료 조건 확인
     is_game_over = len(history) >= 5
     if is_game_over:
         game_record.end_time = timezone.now()
@@ -310,16 +365,25 @@ def play_game_round(game_record, user_action):
 
     game_record.save()
 
+    # 디버깅 로그 추가
+    print(f"Current Round: {current_round}")
+    print(f"History Length: {len(history)}")
+    print(f"History Data: {history}")
+    print(f"Next Problem: {next_problem}")
+    print(f"Is Game Over: {is_game_over}")
+
+    # 모든 조건에서 반환
     return next_problem, is_game_over, reason, is_valid
 
-
 def generate_game_summary(game_record):
-    history = json.loads(game_record.history)
+    history = json.loads(game_record.history) if isinstance(game_record.history, str) else game_record.history
+    
     formatted_history = "\n".join(
-        f"라운드 {entry['round']}: [상황]: {entry['situation']}\n"
-        f"   [행동]: {entry['user_action']}\n"
-        f"   [평가]: {entry['evaluation']}, 점수: {entry['score']}"
+        f"라운드 {entry.get('round', 'N/A')}: [상황]: {entry.get('situation', 'N/A')}\n"
+        f" [행동]: {entry.get('user_action', 'N/A')}\n"
+        f" [평가]: {entry.get('evaluation', 'N/A')}, 점수: {entry.get('score', 0)}"
         for entry in history
     )
+    
     summary = generate_summary(formatted_history)
     return summary

@@ -5,6 +5,7 @@ import GamePlayView from '@/views/GamePlayView.vue'
 import LoungeView from '@/views/LoungeView.vue'
 import MainPage from '@/views/MainPage.vue'
 import ProfilePageView from '@/views/ProfilePageView.vue'
+import ResultView from '@/views/ResultView.vue'
 import RoundResult from '@/views/RoundResult.vue'
 import SelectMovie from '@/views/SelectMovie.vue'
 import SignUpView from '@/views/SignUpView.vue'
@@ -65,7 +66,12 @@ const router = createRouter({
       name : 'roundresult',
       component : RoundResult,
     },
-
+    {
+      path : '/ResultPage',
+      name : 'ResultPage',
+      component : ResultView,
+    },
+  
 
   ],
   

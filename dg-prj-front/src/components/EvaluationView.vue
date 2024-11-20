@@ -20,13 +20,6 @@ const moviestore = useMovieStore()
 const userstore = useUserStore()
 const router = useRouter()
 const gamestore = useGameStore()
-// const gonextStage = function () {
-//     router.push({
-//         name:'roundresult',
-//         state : {result :res.data},
-//     })
-
-// }
     
 onMounted(() => {
     // 3초 후에 이동
