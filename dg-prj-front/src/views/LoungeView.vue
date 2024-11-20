@@ -1,4 +1,5 @@
 <template>
+    <div class="bigbig-container">
     <div>
         <h1>Type to Ending</h1>
         <div class="theater-code" style="margin-top: -30px;">Theater Code : 0000 </div>
@@ -7,7 +8,8 @@
     <div class="grid-container">
         <div>
             <!-- <img class="poster" :src="store.movieId ? require('@/assets/selectimg.jpeg') : require('@/assets/defaultimg.jpeg')" alt=""><br> -->
-            <img class="poster" src='@/assets/selectimg.jpeg'><br>
+            <img class="poster" :src="`http://127.0.0.1:8000${moviestore.poster_path}`" v-if="moviestore.poster_path">
+            <img class="poster" src='@/assets/selectimg.jpeg' v-else><br>
             <button class="select-movie" @click="gogoSelect">영화 선택</button>
         </div>
         
@@ -16,7 +18,7 @@
                 <p style="font-size: medium; padding: 5px;" v-if="moviestore.movieId">{{moviestore.description}}</p>
                 <p style="font-size: medium;" v-else>영화 줄거리가 들어갈 공간입니다.</p>
             </div>
-            <button class="start-game" @click="startGame"
+            <button class="start-game" @click="startGame" :disabled="moviestore.movieId==null"
                     :class="{ 'red-background': moviestore.movieId }">
         게임 시작
     </button>
@@ -35,6 +37,7 @@
 
         </div>
     </div>
+</div>
 </template>
 
 <script setup>
@@ -49,8 +52,8 @@ const gogoSelect = function(){
 }
 
 const startGame = function () {
-
-    
+    console.log('게임을 시작합니다.')
+    router.push({name:'loading'})   
 }
 
 
@@ -58,6 +61,9 @@ const startGame = function () {
 </script>
 
 <style scoped>
+.bigbig-container{
+    width: 1200px;
+}
 .theater-code {
     background-color: black;
     width: 30%;
@@ -73,6 +79,7 @@ const startGame = function () {
     border-radius: 10px;
     background-color: red;
     font-weight: 600;
+    font-size: x-large;
     padding: 10px;
     height: fit-content;
     width: fit-content;
@@ -82,6 +89,8 @@ const startGame = function () {
 .poster{
     width: 70%;
     margin-top: 30px;
+    border-radius: 20px;
+    border: 1px white solid;
 }
 .select-movie{
     color: white;
@@ -104,5 +113,14 @@ const startGame = function () {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+.red-background{
+    padding: 10px 20px;
+    font-size: large;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    background-color:red;
 }
 </style>

@@ -6,7 +6,7 @@
         {{ moviestore.roomId }}
     <form @submit.prevent="submitMovie">
     <div v-for="movie in moviestore.movies" :key="movie.id">
-        
+        <!-- 영화 정보 렌더링 -->
         <p style="text-align: left;">{{movie.title}} <input
           type="radio"
           :value="movie"
@@ -41,11 +41,14 @@ onMounted(() => {
 
 const submitMovie = () => {
   if (selectedMovie.value) {
-    moviestore.movieId = selectedMovie.value.id; // 선택한 영화 정보 저장
+    // 선택한 영화 정보 저장
+    moviestore.movieId = selectedMovie.value.id; 
     moviestore.movie_name = selectedMovie.value.title
     moviestore.description = selectedMovie.value.description
     moviestore.context = selectedMovie.value.context
+    moviestore.poster_path = selectedMovie.value.poster_path
 
+    // 라운지로 다시 이동. roomID와 함께.
     router.push({name:'LoungeView', params: { roomId : moviestore.roomId}})
 
   } else {
