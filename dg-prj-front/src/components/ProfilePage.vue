@@ -11,6 +11,6 @@ import { useUserStore } from '@/stores/counter';
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

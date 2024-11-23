@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bigbig-container">
         <h1> Round : {{ gamestore.game_round }}</h1>
         <div class="playgame-container">
         <!-- <p>{{ moviestore.movie_name }}</p>
@@ -8,8 +8,9 @@
         <div class="high-bar">
             구현 예정 
         </div>
-        <div class="description-game" v-if="result.is_valid"> 채택!! </div>
-        <div class="description-game" v-else> 폐기!! </div>
+        <div class="description-game"> 시나리오를 
+            <span v-if="result.is_valid" style="color: blue; font-weight: 800;">채택</span>
+            <span v-else style="color: red; font-weight: 800;">폐기</span>합니다. </div>
         <div class="scenario-container">
             <div class="scenario-box">유저 시나리오
                 <p>{{   gamestore.user_action1 }}</p>
@@ -22,9 +23,13 @@
             </div>
             
         </div>
-        <button class="submit-btn" @click="nextStage">
-        다음으로
-    </button>
+        <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" @click="nextStage"
+            style="margin-top: 15px;">
+            <span v-if="gamestore.game_round==4">결말보기</span>
+            <span v-else>다음으로</span>
+        </button>
+    </div>
 
     </div>
 </div>
@@ -61,6 +66,13 @@ const nextStage = function () {
 </script>
 
 <style scoped>
+.bigbig-container{
+  padding : 5rem;
+  text-align: center;
+}
+.btn-loc{
+    margin-left: 10%;
+}
 .submit-btn{
     padding: 10px 20px;
     font-size: large;
