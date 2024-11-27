@@ -1,61 +1,57 @@
 <template>
-    <div class="container-center-horizontal--main" @click="howToPlayHandler">
-        <div class="main screen">
-            <!-- title -->
-            <h1 class="title">Type to Ending</h1>
-            <div class="overlap-group-container">
-                <div class="overlap-group">
-                    <!-- 여기에는 주요 요소들 -->
-                    <!--how to play modal-->
-                    <div class="black-bg show-how-to-play" v-if="modalStore.isHowToPlayModalOpen"
-                        @click="howToPlayHandler">
-                        <howToPlay class="how-to-play-modal" />
-                    </div>
-
-                    <!-- 방 입장을 위한 모달 >> 개발 보류 -->
-                    <div class="card" v-if="isEnterRoomModalOpen" @click="closeEnterRoomModal">
-                        <div class="text-container">
-                            <div class="heading valign-text-middle">영화관 코드를 입력해주세요</div>
-                        </div>
-                        <div class="buttons-container">
-                            <div class="button-4">
-                                <div class="text-3 valign-text-middle">3F7D</div>
+    <div class="container-center-horizontal--main">
+        <video autoplay loop muted class="background-video">
+            <source src="@/assets/movies/background.mp4" type="video/mp4">
+        </video>
+        <div class="container-center-horizontal--main" @click="howToPlayHandler">
+            <div class="main screen" style="background-color: rgba(0, 0, 0, 0.8);">
+                <!-- title -->
+                <h1 class="title">Type to Ending</h1>
+                <div class="overlap-group-container">
+                    <div class="overlap-group">
+                        <!-- 방 입장을 위한 모달 >> 개발 보류 -->
+                        <div class="card" v-if="isEnterRoomModalOpen" @click="closeEnterRoomModal">
+                            <div class="text-container">
+                                <div class="heading valign-text-middle">영화관 코드를 입력해주세요</div>
                             </div>
-                            <div class="button-5">
-                                <div class="text-4">확인</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 로그인 이전 -->
-                    <form class="form" v-if="!accountStore.token">
-                        <div class="items-container">
-                            <div class="container">
-                                <div class="heading manrope-semi-bold-white-18px">E-mail</div>
-                                <div class="input-field">
-                                    <input v-model="email" type="text" class="text email-pw-input"
-                                        placeholder="Enter your email">
+                            <div class="buttons-container">
+                                <div class="button-4">
+                                    <div class="text-3 valign-text-middle">3F7D</div>
+                                </div>
+                                <div class="button-5">
+                                    <div class="text-4">확인</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="items-container">
-                            <div class="container">
-                                <div class="heading manrope-semi-bold-white-18px">Password</div>
-                                <div class="input-field">
-                                    <input v-model="password" type="password" class="text email-pw-input"
-                                        placeholder="Enter your password">
+                        <!-- 로그인 이전 -->
+                        <form class="form" v-if="!accountStore.token">
+                            <div class="items-container">
+                                <div class="container">
+                                    <div class="heading manrope-semi-bold-white-18px">이메일</div>
+                                    <div class="input-field">
+                                        <input v-model="email" type="text" class="text email-pw-input"
+                                            placeholder="이메일을 입력해주세요">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="items-container">
-                            <div class="container">
-                                <button @click.prevent="loginFunc" class="red-button-common">
-                                    <input type="submit" class="option-common" value="log in">
-                                </button>
+                            <div class="items-container">
+                                <div class="container">
+                                    <div class="heading manrope-semi-bold-white-18px">비밀번호</div>
+                                    <div class="input-field">
+                                        <input v-model="password" type="password" class="text email-pw-input"
+                                            placeholder="비밀번호를 입력해주세요">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- 버튼 누르면 다른 페이지로 감 -->
-                        <!-- <div class="items-container">
+                            <div class="items-container">
+                                <div class="container">
+                                    <button @click.prevent="loginFunc" class="red-button-common">
+                                        <span type="submit" class="option-common">로그인</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- 버튼 누르면 다른 페이지로 감 -->
+                            <!-- <div class="items-container">
                             <div class="container">
                                 <RouterLink :to="{ name: 'SignUpView' }">
                                     <button class="grey-button-common">
@@ -64,155 +60,112 @@
                                 </RouterLink>
                             </div>
                         </div> -->
+                            <div class="items-container">
+                                <div class="container">
+                                    <button class="grey-button-common" @click.prevent="toggleSignUpModal">
+                                        <span class="sign-up">{{ isSignUpModalOpen ? "가입 취소" : "회원 가입" }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- 로그인 이후 -->
+                        <div class="form" v-else>
+                            <div class="items-container">
+                                <div class="container">
+                                    <button @click.prevent="moveToProfilePage" class="red-button-common">
+                                        <p style="padding: 0px 0px; margin: 0px" class="option-common">프로필</p>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="items-container">
+                                <div class="container">
+                                    <button @click.prevent="GameStart" class="red-button-common">
+                                        <p style="padding: 0px 0px; margin: 0px" class="option-common">게임 시작</p>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="items-container">
+                                <div class="container">
+                                    <button @click.prevent="CreateMovie" class="red-button-common">
+                                        <p style="padding: 0px 0px; margin: 0px" class="option-common">영화 만들기</p>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="items-container">
+                                <div class="container">
+                                    <button @click.prevent="logOutFunc"
+                                        class="invisible grey-button-common log-out-button">
+                                        <p style="padding: 0px 0px; margin: 0px" class="log-out">로그아웃</p>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="items-container">
+                                <div class="container">
+                                    <button @click.prevent="logOutFunc" class="grey-button-common log-out-button">
+                                        <p style="padding: 0px 0px; margin: 0px" class="log-out">로그아웃</p>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- <img class="generic-avatar" src="@/assets/icons/generic-avatar.png" alt="generic-avatar"
+                            @click.prevent="moveToProfilePage">
+                        <img class="add-circle" src="@/assets/icons/add-circle.png" alt="add-circle"
+                            @click.prevent="GameStart">
+                        <img class="forward" src="@/assets/icons/forward.png" alt="forward"
+                            @click.prevent="isEnterRoomModalOpen = true"> -->
+                        </div>
+                    </div>
+                    <form class="form-1" v-if="!accountStore.token && isSignUpModalOpen">
                         <div class="items-container">
                             <div class="container">
-                                <button class="grey-button-common" @click.prevent="toggleSignUpModal">
-                                    <span class="sign-up">{{ isSignUpModalOpen ? "Close Form" : "Sign Up" }}</span>
+                                <div class="input-field">
+                                    <input v-model.trim="newEmail" type="email" class="text email-pw-input"
+                                        placeholder="이메일을 입력해주세요">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="items-container">
+                            <div class="container">
+                                <div class="input-field">
+                                    <input v-model.trim="newNickname" type="text" class="text email-pw-input"
+                                        placeholder="닉네임을 입력해주세요">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="items-container">
+                            <div class="container">
+                                <div class="input-field">
+                                    <input v-model.trim="newPassword1" type="password" class="text email-pw-input"
+                                        placeholder="비밀번호를 입력해주세요">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="items-container">
+                            <div class="container">
+                                <div class="input-field">
+                                    <input v-model.trim="newPassword2" type="password" class="text email-pw-input"
+                                        placeholder="비밀번호를 확인해주세요">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="items-container">
+                            <div class="container">
+                                <button class="red-button-common" @click.prevent="signUpFunc">
+                                    <div class="option-common manrope-semi-bold-white-18px">가입하기</div>
                                 </button>
                             </div>
                         </div>
                     </form>
-
-                    <!-- 로그인 이후 -->
-                    <div class="form" v-else>
-                        <div class="items-container">
-                            <div class="container">
-                                <button @click.prevent="moveToProfilePage" class="red-button-common">
-                                    <p style="padding: 0px 0px; margin: 0px" class="option-common">Profile</p>
-                                </button>
-                            </div>
+                    <!-- 공간차지용 더미 태그 : 삭제하지 말것 -->
+                    <div class="dummy-form" v-else>
+                    </div>
+                    <div class="overlap-group-1">
+                        <!-- Modal -->
+                        <div>
+                            <howToPlay />
                         </div>
-                        <div class="items-container">
-                            <div class="container">
-                                <button @click.prevent="CreateRoom" class="red-button-common">
-                                    <p style="padding: 0px 0px; margin: 0px" class="option-common">Create Room</p>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="items-container">
-                            <div class="container">
-                                <button @click.prevent="isEnterRoomModalOpen = false" class="red-button-common">
-                                    <p style="padding: 0px 0px; margin: 0px" class="option-common">Enter Room</p>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="items-container">
-                            <div class="container">
-                                <button @click.prevent="logOutFunc" class="grey-button-common log-out-button">
-                                    <p style="padding: 0px 0px; margin: 0px" class="log-out">Log Out</p>
-                                </button>
-                            </div>
-                        </div>
-                        <img class="generic-avatar" src="@/assets/icons/generic-avatar.png" alt="generic-avatar"
-                            @click.prevent="moveToProfilePage">
-                        <img class="add-circle" src="@/assets/icons/add-circle.png" alt="add-circle"
-                            @click.prevent="CreateRoom">
-                        <img class="forward" src="@/assets/icons/forward.png" alt="forward"
-                            @click.prevent="isEnterRoomModalOpen = true">
                     </div>
                 </div>
-                <form class="form-1" v-if="!accountStore.token && isSignUpModalOpen">
-                    <div class="items-container">
-                        <div class="container">
-                            <div class="input-field">
-                                <input v-model.trim="newEmail" type="email" class="text email-pw-input"
-                                    placeholder="Enter your email">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="items-container">
-                        <div class="container">
-                            <div class="input-field">
-                                <input v-model.trim="newNickname" type="text" class="text email-pw-input"
-                                    placeholder="Enter your nickname">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="items-container">
-                        <div class="container">
-                            <div class="input-field">
-                                <input v-model.trim="newPassword1" type="password" class="text email-pw-input"
-                                    placeholder="Enter your password">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="items-container">
-                        <div class="container">
-                            <div class="input-field">
-                                <input v-model.trim="newPassword2" type="password" class="text email-pw-input"
-                                    placeholder="Confirm your password">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="items-container">
-                        <div class="container">
-                            <button class="red-button-common" @click.prevent="signUpFunc">
-                                <div class="option-common manrope-semi-bold-white-18px">Sign Up</div>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- 공간차지용 더미 태그 : 삭제하지 말것 -->
-                <div class="dummy-form" v-else>
-
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <!-- 얘 손좀 보자 -->
-                <!-- 모달을 띄워주는 버튼 -->
-                <div class="overlap-group-1">
-                    <button class="button-2 button-3 modal-button">
-                        <img class="icon modal-button" src="@/assets/icons/icon.png" alt="Icon" />
-                        <div class="modal-button show-how-to-play text-2 valign-text-middle manrope-semi-bold-white-32px"
-                            @click.prevent="howToPlayHandler">How to play</div>
-                    </button>
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
         </div>
     </div>
@@ -242,9 +195,8 @@ const newPassword1 = ref(null)
 const newPassword2 = ref(null)
 const newNickname = ref(null)
 
-const isEnterRoomModalOpen = ref(false)
 const isSignUpModalOpen = ref(false)
-
+const isEnterRoomModalOpen = ref(false)
 
 // 초기 설정
 onMounted(() => {
@@ -255,8 +207,8 @@ onMounted(() => {
     moviestore.movieId = null
     modalStore.isHowToPlayModalOpen = false
     gamesStore.game_round = 0
-    
-    console.log(accountStore.token)
+    gamesStore.initial_question = null
+    gamesStore.next_situation = null
 })
 
 // 회원 가입폼에 입력한 정보 초기화하는 함수
@@ -277,8 +229,6 @@ const moveToProfilePage = () => {
 
 // 로그인 함수
 const loginFunc = function () {
-    console.log(email.value)
-    console.log(password.value)
     const payload = {
         email: email.value,
         password: password.value,
@@ -304,12 +254,12 @@ const signUpFunc = () => {
 }
 
 // 방 생성 하는 함수
-const CreateRoom = function () {
+const GameStart = function () {
     // 방 번호가 랜덤으로 들어가야함. 이지만 나중에 해보자잇.
 
     const roomId = uuidv4()
     moviestore.roomId = roomId
-    console.log(moviestore.roomId)
+    // console.log(moviestore.roomId)
     router.push({ name: 'LoungeView', params: { roomId } })
 }
 
@@ -318,11 +268,6 @@ const closeEnterRoomModal = (event) => {
     if (event.target.classList.contains('card')) {
         isEnterRoomModalOpen.value = false;
     }
-}
-
-// 방 입장 모달 열기 >> 개발 보류
-const enterRoomFunc = () => {
-    isEnterRoomModalOpen.value = true
 }
 
 // 게임 설명 모달을 열어주는 함수
@@ -352,18 +297,9 @@ const howToPlayHandler = (event) => {
     }
 }
 
-// 게임 설명 모달을 닫아주는 함수 >> 모달 외부 클릭하면 닫아짐
-// 내가 의도한 것 : 모달 창 외부를 클릭 >> 흰 화면 바깥 어디를 클릭해도 닫아져야함
-// 모달의 배경은 배경색상과 똑같음 >> 체감상 없다고 생각할 수 있음 >> 여기 클릭하면 닫아지는거 완료
-// 그런데 제목은 보여야함 >> 제목에는 모달 배경이 안덮여있음 >> 따라서 "모달 배경"의 외부를 클릭해도 닫아져야함
-// 그러느니 그냥 흰 모달창 외부 or X 버튼 클릭시 닫아버리자
-
-// 대기실로 입장하는 함수
-const moveToWaitingRoom = () => {
-    router.push({
-        name: 'WaitingRoomView',
-        params: { roomCode: "3F7D" }
-    })
+// 영화 생성 페이지로 이동하는 함수
+const CreateMovie = function () {
+    router.push({ name: 'CreateMovie' })
 }
 
 // 회원 가입 폼을 열고 닫는 함수, sign up 버튼에 적용됨
@@ -375,12 +311,17 @@ const toggleSignUpModal = () => {
 </script>
 
 <style scoped>
-/* 장식용 cdn */
-/* @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"); */
-/* @import url("https://fonts.googleapis.com/css?family=Inter:400|Inknut+Antiqua:400|Manrope:400,600"); */
-/* The following line is used to measure usage of this code. You can remove it if you want. */
-/* @import url("https://px.animaapp.com/673df13076e2d7568d4b0197.673df13076e2d7568d4b019a.vdlRvPB.hcp.png"); */
-
+.background-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    object-fit: cover;
+}
 
 .button-2 {
     border: 0px;
@@ -403,7 +344,7 @@ const toggleSignUpModal = () => {
 
 .howtoplay-container {
     border: 1px white solid;
-    background-color: red;
+    background-color: var(--red45);
     font-weight: 600;
     padding: 10px;
     height: fit-content;
@@ -421,7 +362,7 @@ div {
 .black-bg {
     width: 100%;
     height: 100%;
-    background: #1a1a1a;
+    background: var(--black10);
     position: fixed;
     top: 100;
     /* 화면의 최상단 */
@@ -447,12 +388,12 @@ div {
     align-items: flex-start;
     background-color: var(--black06);
     border: 1px solid;
-    border-color: var(--black15);
+    border-color: var(--abbey);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 50px;
-    height: 621px;
+    gap: 45px;
+    height: 620px;
     margin-left: 27px;
     padding: 50px;
     position: relative;
@@ -461,7 +402,7 @@ div {
 
 .dummy-form {
     align-items: flex-start;
-    background-color: var(--eerie-black);
+    background-color: transparent;
 
 
 
@@ -503,21 +444,6 @@ div {
     gap: 20px;
     position: relative;
     width: 100%;
-}
-
-.button-4 {
-    align-items: center;
-    background-color: var(--black08);
-    border: 1px solid;
-    border-color: var(--black15);
-    border-radius: 8px;
-    display: flex;
-    gap: 10px;
-    height: 59px;
-    justify-content: center;
-    padding: 0px 24px;
-    position: relative;
-    width: 328px;
 }
 
 .text-3 {
@@ -649,7 +575,9 @@ div {
 
 .main {
     align-items: flex-start;
-    background-color: var(--eerie-black);
+    /* background-color: var(--eerie-black); */
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    background-color: transparent;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -670,7 +598,7 @@ div {
     margin-top: 87px;
     min-height: 248px;
     min-width: 816px;
-    text-shadow: 0px 4px 4px #00000040;
+    text-shadow: 0px 4px 4px var(--black06);
 }
 
 .main .overlap-group-container {
@@ -711,28 +639,16 @@ div {
     width: 60px;
 }
 
-.main .remember-me {
-    color: var(--eerie-black);
-    font-family: var(--font-family-inter);
-    font-size: var(--font-size-s);
-    font-weight: 400;
-    left: 52px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 306px;
-}
 
 .main .form {
     align-items: flex-start;
     background-color: var(--black06);
-    border: 1px solid;
-    border-color: var(--black15);
+    border: 1px solid var(--abbey);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 50px;
-    height: 621px;
+    gap: 45px;
+    height: 620px;
     left: 0;
     padding: 50px;
     position: absolute;
@@ -771,9 +687,8 @@ div {
 .main .input-field {
     align-items: center;
     align-self: stretch;
-    background-color: var(--black08);
-    border: 1px solid;
-    border-color: var(--black15);
+    background-color: var(--black10);
+    border: 1px solid var(--abbey);
     border-radius: 8px;
     display: flex;
     flex: 0 0 auto;
@@ -782,6 +697,11 @@ div {
     padding: 20px;
     position: relative;
     width: 100%;
+}
+
+.input-field:focus{
+    outline: none;
+    border: 2px solid var(--red45);
 }
 
 .main .text {
@@ -794,16 +714,20 @@ div {
     line-height: 27px;
     margin-top: -1.00px;
     position: relative;
+    border: 0px;
 }
 
 
 
 .email-pw-input {
     z-index: 1000;
-    border: 0px;
     padding: 0px;
+    background-color: var(--black10);
 }
 
+.email-pw-input:focus{
+    border: 2px solid var(--red45);
+}
 
 
 .main .container-1 {
@@ -837,13 +761,6 @@ div {
     width: 280px;
 }
 
-.main .icon-media-play {
-    height: 27px;
-    left: 253px;
-    position: absolute;
-    top: 0;
-    width: 27px;
-}
 
 
 .main .icon {
@@ -853,10 +770,6 @@ div {
     position: relative;
     width: 28px;
 }
-
-
-
-
 
 .manrope-semi-bold-white-18px {
     color: var(--absolutewhite);
@@ -879,11 +792,9 @@ div {
     line-height: 27px;
     margin-top: -1.00px;
     position: relative;
-    background-color: var(--red45);
 }
 
 .log-out {
-    border: 0px;
     padding: 0px;
     color: var(--absolutewhite);
     text-align: center;
@@ -895,14 +806,11 @@ div {
     line-height: 27px;
     margin-top: -1.00px;
     position: relative;
-    background-color: var(--grey60);
 }
 
 .sign-up {
     margin: 0;
-    /* 기본 마진 제거 추가 */
     text-align: center;
-    /* 텍스트 중앙 정렬 추가 */
     border: 0px;
     padding: 0px;
     color: var(--absolutewhite);
@@ -914,15 +822,14 @@ div {
     line-height: 27px;
     margin-top: -1.00px;
     position: relative;
-    background-color: var(--grey60);
 }
 
 
 .red-button-common {
     align-items: center;
     align-self: stretch;
-    background-color: var(--red45);
-    border: 1px solid;
+    background-color: var(--black10);
+    border: 2px solid var(--red45);
     border-color: var(--red45);
     border-radius: 8px;
     display: flex;
@@ -932,7 +839,13 @@ div {
     padding: 20px;
     position: relative;
     width: 100%;
+    transition: all 0.3s ease;
+}
 
+.red-button-common:hover {
+    background-color: var(--red45);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .how-to-play-button-common {
@@ -958,16 +871,11 @@ div {
     /* 텍스트 줄 바꿈 방지 */
 }
 
-.log-out-button {
-    margin-top: 81px;
-}
-
 .grey-button-common {
     align-items: center;
     align-self: stretch;
-    background-color: var(--grey60);
-    border: 1px solid;
-    border-color: var(--grey60);
+    background-color: var(--black10);
+    border: 2px solid var(--grey60);
     border-radius: 8px;
     display: flex;
     flex: 0 0 auto;
@@ -982,6 +890,13 @@ div {
     padding: 0px 0px;
     width: 362px;
     height: 68px;
+    transition: all 0.3s ease;
+}
+
+.grey-button-common:hover {
+    background-color: var(--grey60);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /***************************************************/

@@ -1,16 +1,30 @@
 <template>
-    <div>
-        {{ store.token }}
-    </div>
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
+        <!-- No Longer Used!!! Deprecated!!! -->
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/counter';
 
 // token 정보 => userid
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

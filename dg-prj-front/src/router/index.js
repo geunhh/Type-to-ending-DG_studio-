@@ -1,4 +1,5 @@
 import ComeScenario from '@/components/ComeScenario.vue'
+import CreateMovie from '@/components/CreateMovie.vue'
 import EvaluationView from '@/components/EvaluationView.vue'
 import Recordtest from '@/components/recordtest.vue'
 import GamePlayView from '@/views/GamePlayView.vue'
@@ -66,10 +67,15 @@ const router = createRouter({
       component: RoundResult,
     },
     {
-      path : '/ResultPage',
-      name : 'ResultPage',
-      component : ResultView,
+      path: '/ResultPage',
+      name: 'ResultPage',
+      component: ResultView,
     },
+    {
+      path: '/CreateMovie',
+      name: 'CreateMovie',
+      component: CreateMovie
+    }
   ],
 
 })
